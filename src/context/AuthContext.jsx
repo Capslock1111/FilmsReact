@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const checkAuth = () => {
@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
     const login = async (username, password) => {
         const success = await authService.login(username, password);
         if (success) {
-            setIsAuthenticated(true);
+            // setIsAuthenticated(true);
         }
         return success;
     };
@@ -32,7 +32,9 @@ export function AuthProvider({ children }) {
 
     const value = {
         isAuthenticated,
+        setIsAuthenticated,
         isLoading,
+        setIsLoading,
         login,
         logout,
     };
