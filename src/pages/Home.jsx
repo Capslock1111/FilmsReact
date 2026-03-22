@@ -11,7 +11,6 @@ function Home({ featuredMovies, setFeaturedMovies }) {
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isToastOpen, setIsToastOpen] = useState(false);
   // const handleCloseToastModal = () => {
   //   setIsToastOpen(false);
   // };

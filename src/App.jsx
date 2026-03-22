@@ -16,7 +16,6 @@ import { useAuth } from './context/useAuth';
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
   const [featuredMovies, setFeaturedMovies] = useState([]);
 
   if (isLoading) {
@@ -33,8 +32,6 @@ function AppContent() {
       {/* Скрываем Header для неавторизованных пользователей */}
       {isAuthenticated && (
         <Header
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
         />
       )}
       <main className="main-content">
@@ -57,8 +54,6 @@ function AppContent() {
                 path="/movies"
                 element={
                   <Movies
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
                     featuredMovies={featuredMovies}
                     setFeaturedMovies={setFeaturedMovies}
                   />

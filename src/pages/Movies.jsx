@@ -4,13 +4,13 @@ import MovieCard from "../components/MovieCard";
 import LogService from "../services/LogService";
 import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
+import { useSearch } from "../context/useSearch";
 
 function Movies({
-  searchQuery,
-  setSearchQuery,
   featuredMovies,
   setFeaturedMovies,
 }) {
+  const { searchQuery, setSearchQuery } = useSearch();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("default");

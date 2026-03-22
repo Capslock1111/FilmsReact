@@ -2,12 +2,13 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import "./Header.css";
 import LogService from "../services/LogService";
-import { AppProvider } from "../context";
 import { useAuth } from "../context/useAuth";
+import { useSearch } from "../context/useSearch";
 
 
-function Header({ searchQuery, setSearchQuery, onLoout }) {
+function Header() {
   const { logout } = useAuth();
+  const { searchQuery, setSearchQuery } = useSearch();
   const inputRef = useRef(null);
   const location = useLocation();
 
@@ -46,71 +47,71 @@ function Header({ searchQuery, setSearchQuery, onLoout }) {
   }, [location.pathname, setSearchQuery]); // Срабатывает при смене пути URL и при изменении состояния поиска
 
   return (
-    <AppProvider>
-      <header className="header">
-        <div className="container">
-          <div className="header-content">
-            <div className="logo">
-              <Link to="/" className="logo-link">
-                <span className="logo-icon">🎬</span>
-                <span className="logo-text">CinemaHub</span>
-              </Link>
-            </div>
 
-            <nav className="nav">
-              <ul className="nav-list">
-                <li className="nav-item">
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Главная
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink
-                    to="/movies"
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    Фильмы
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
-
-            <div className="header-search">
-              <input
-                type="text"
-                placeholder="Поиск фильмов..."
-                className="search-input"
-                ref={inputRef}
-                defaultValue={searchQuery}
-                onKeyDown={handleKeyPress}
-              />
-              <Link
-                to="/movies"
-                onClick={handleSearchClick}
-                className="search-btn"
-              >
-                🔍
-              </Link>
-            </div>
-            {/* Добавляем кнопку выхода из аккаунта (сброс localStorage) */}
-            <button
-              onClick={handleLogoutClick}
-              className="btn btn-outline logout-btn"
-              title="Выйти из аккаунта"
-            >
-              Выйти
-            </button>
+    <header className="header">
+      <div className="container">
+        <div className="header-content">
+          <div className="logo">
+            <Link to="/" className="logo-link">
+              <span className="logo-icon">🎬</span>
+              <span className="logo-text">CinemaHub</span>
+            </Link>
           </div>
+
+          <nav className="nav">
+            <ul className="nav-list">
+              <li className="nav-item">
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
+                  Главная
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  to="/movies"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
+                  Фильмы
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
+
+          <div className="header-search">
+            <input
+              type="text"
+              placeholder="Поиск фильмов..."
+              className="search-input"
+              ref={inputRef}
+              defaultValue={searchQuery}
+              onKeyDown={handleKeyPress}
+            />
+            <Link
+              to="/movies"
+              onClick={handleSearchClick}
+              className="search-btn"
+            >
+              🔍
+            </Link>
+          </div>
+          {/* Добавляем кнопку выхода из аккаунта (сброс localStorage) */}
+          <button
+            onClick={handleLogoutClick}
+            className="btn btn-outline logout-btn"
+            title="Выйти из аккаунта"
+          >
+            Выйти
+          </button>
         </div>
-      </header>
-    </AppProvider>
+      </div>
+    </header>
+
   );
 }
 
