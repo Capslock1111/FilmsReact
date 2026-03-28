@@ -1,13 +1,14 @@
 import { AuthProvider } from "./AuthContext";
 import { SearchProvider } from "./SearchContext";
-import { ModalProvider } from "./ModalContext";
+import { ThemeProvider } from "./ThemeContext";
 
+// Компонент, который объединяет все провайдеры
 export function AppProvider({ children }) {
-    return (
-        <AuthProvider>
-            <SearchProvider>
-                <ModalProvider>{children}</ModalProvider>
-            </SearchProvider>
-        </AuthProvider>
-    )
+  return (
+    <AuthProvider>
+      <SearchProvider>
+        <ThemeProvider>{children}</ThemeProvider>
+      </SearchProvider>
+    </AuthProvider>
+  );
 }

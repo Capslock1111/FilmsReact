@@ -12,7 +12,7 @@
   font-size: 2.8rem;
   font-weight: 800;
   margin-bottom: 1rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
   background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -21,7 +21,7 @@
 
 .page-subtitle {
   font-size: 1.2rem;
-  color: var(--gray-color);
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -29,11 +29,11 @@
 
 /* Панель фильтров */
 .filters-panel {
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 15px;
   padding: 1.5rem 2rem;
   margin-bottom: 3rem;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow, 0 10px 20px rgba(0, 0, 0, 0.1));
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
@@ -51,17 +51,17 @@
 
 .filter-label {
   font-weight: 600;
-  color: var(--dark-color);
+  color: var(--text-primary);
   font-size: 0.95rem;
 }
 
 .filter-select {
   padding: 0.8rem 1rem;
-  border: 2px solid var(--light-gray);
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  color: var(--dark-color);
-  background-color: white;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
   cursor: pointer;
   transition: var(--transition);
 }
@@ -86,11 +86,11 @@
 }
 
 .search-query {
-  background-color: var(--light-gray);
+  background-color: var(--bg-secondary);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
 }
 
 .movies-count {
@@ -111,9 +111,9 @@
 .no-results {
   text-align: center;
   padding: 4rem 2rem;
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 15px;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow, 0 10px 20px rgba(0, 0, 0, 0.1));
 }
 
 .no-results-icon {
@@ -124,12 +124,12 @@
 
 .no-results-title {
   font-size: 2rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
 .no-results-text {
-  color: var(--gray-color);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: 2rem;
   max-width: 500px;
@@ -148,10 +148,10 @@
 
 .pagination-btn {
   padding: 0.8rem 1.5rem;
-  background-color: white;
-  border: 2px solid var(--light-gray);
+  background-color: var(--card-bg);
+  border: 2px solid var(--border-color);
   border-radius: 8px;
-  color: var(--dark-color);
+  color: var(--text-primary);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
@@ -169,7 +169,7 @@
 }
 
 .pagination-info {
-  color: var(--gray-color);
+  color: var(--text-secondary);
   font-size: 1rem;
 }
 
@@ -238,7 +238,7 @@
 .loading-spinner {
   width: 60px;
   height: 60px;
-  border: 4px solid var(--light-gray);
+  border: 4px solid var(--border-color);
   border-top: 4px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -258,9 +258,9 @@
 .error-container {
   text-align: center;
   padding: 4rem 2rem;
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 15px;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow, 0 10px 20px rgba(0, 0, 0, 0.1));
 }
 
 .error-icon {
@@ -271,7 +271,7 @@
 
 .error-title {
   font-size: 2rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
   margin-bottom: 1rem;
 }
 
@@ -282,6 +282,6 @@
 }
 
 .error-hint {
-  color: var(--gray-color);
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }

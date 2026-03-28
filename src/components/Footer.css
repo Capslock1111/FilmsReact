@@ -1,8 +1,11 @@
 .footer {
-  background-color: var(--dark-color);
-  color: white;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
   padding: 3rem 0 1.5rem;
   margin-top: auto;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .footer-content {
@@ -27,14 +30,14 @@
 }
 
 .footer-description {
-  color: var(--light-gray);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 .footer-subtitle {
   font-size: 1.2rem;
   margin-bottom: 1.2rem;
-  color: white;
+  color: var(--text-primary);
 }
 
 .footer-links {
@@ -43,11 +46,11 @@
 
 .footer-links li {
   margin-bottom: 0.8rem;
-  color: var(--light-gray);
+  color: var(--text-secondary);
 }
 
 .footer-link {
-  color: var(--light-gray);
+  color: var(--text-secondary);
   text-decoration: none;
   transition: var(--transition);
 }
@@ -58,10 +61,10 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   padding-top: 1.5rem;
   text-align: center;
-  color: var(--light-gray);
+  color: var(--text-secondary);
   font-size: 0.9rem;
   display: flex;
   flex-direction: column;

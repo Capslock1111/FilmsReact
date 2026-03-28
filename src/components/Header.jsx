@@ -4,13 +4,14 @@ import "./Header.css";
 import LogService from "../services/LogService";
 import { useAuth } from "../context/useAuth";
 import { useSearch } from "../context/useSearch";
-
+import { useTheme } from "../context/useTheme";
 
 function Header() {
-  const { logout } = useAuth();
-  const { searchQuery, setSearchQuery } = useSearch();
   const inputRef = useRef(null);
   const location = useLocation();
+  const { logout } = useAuth();
+  const { searchQuery, setSearchQuery } = useSearch();
+  const { theme, toggleTheme } = useTheme();
 
   const handleSearchClick = () => {
     if (inputRef.current) {
@@ -47,10 +48,23 @@ function Header() {
   }, [location.pathname, setSearchQuery]); // Срабатывает при смене пути URL и при изменении состояния поиска
 
   return (
-
     <header className="header">
       <div className="container">
         <div className="header-content">
+          <button
+            onClick={toggleTheme}
+            style={{
+              background: "none",
+              border: "none",
+              fontSize: "1.5rem",
+              cursor: "pointer",
+              marginLeft: "1rem",
+              padding: "0.5rem",
+            }}
+            title={theme === "light" ? "Тёмная тема" : "Светлая тема"}
+          >
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
           <div className="logo">
             <Link to="/" className="logo-link">
               <span className="logo-icon">🎬</span>
@@ -111,7 +125,6 @@ function Header() {
         </div>
       </div>
     </header>
-
   );
 }
 

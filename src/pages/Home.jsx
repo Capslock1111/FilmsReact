@@ -1,19 +1,16 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./Home.css";
 import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import MovieCard from "../components/MovieCard";
-import ToastModal from '../components/ToastModal';
-import { useLocation } from 'react-router-dom';
+
 function Home({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const handleCloseToastModal = () => {
-  //   setIsToastOpen(false);
-  // };
+
   useEffect(() => {
     const loadFeaturedMovies = async () => {
       try {
@@ -47,6 +44,7 @@ function Home({ featuredMovies, setFeaturedMovies }) {
         setIsLoading(false);
       }
     };
+
     loadFeaturedMovies();
   }, []);
 
@@ -164,10 +162,6 @@ function Home({ featuredMovies, setFeaturedMovies }) {
         isOpen={isModalOpen}
         onCloseModal={handleCloseModal}
       />
-      {/* <ToastModal
-        onClose={handleCloseToastModal}
-        isToastOpen={isToastOpen}
-      /> */}
     </div>
   );
 }

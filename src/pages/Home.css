@@ -43,11 +43,11 @@
 }
 
 .feature-card {
-  background-color: white;
+  background-color: var(--card-bg);
   padding: 2rem;
   border-radius: 15px;
   text-align: center;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow, 0 10px 20px rgba(0, 0, 0, 0.1));
   transition: var(--transition);
 }
 
@@ -63,11 +63,11 @@
 .feature-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
 }
 
 .feature-description {
-  color: var(--gray-color);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -90,10 +90,10 @@
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 2rem;
-  background-color: white;
+  background-color: var(--card-bg);
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow, 0 10px 20px rgba(0, 0, 0, 0.1));
   transition: var(--transition);
 }
 
@@ -125,7 +125,7 @@
   top: 15px;
   right: 15px;
   background-color: rgba(255, 255, 255, 0.9);
-  color: var(--dark-color);
+  color: var(--text-primary);
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
   font-weight: 600;
@@ -141,19 +141,19 @@
 .featured-movie-title {
   font-size: 1.8rem;
   margin-bottom: 0.8rem;
-  color: var(--dark-color);
+  color: var(--text-primary);
 }
 
 .featured-movie-details {
   display: flex;
   gap: 1.5rem;
   margin-bottom: 1.2rem;
-  color: var(--gray-color);
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
 .featured-movie-description {
-  color: var(--gray-color);
+  color: var(--text-secondary);
   margin-bottom: 1.8rem;
   line-height: 1.6;
   flex: 1;

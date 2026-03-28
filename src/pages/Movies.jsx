@@ -6,11 +6,7 @@ import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import { useSearch } from "../context/useSearch";
 
-function Movies({
-  featuredMovies,
-  setFeaturedMovies,
-}) {
-  const { searchQuery, setSearchQuery } = useSearch();
+function Movies({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("default");
@@ -18,6 +14,7 @@ function Movies({
   const [displaySearchQuery, setDisplaySearchQuery] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null); // ← состояние для хранения выбранного фильма
   const [isOpen, setIsOpen] = useState(false);
+  const { searchQuery, setSearchQuery } = useSearch();
 
   const hasFetched = useRef(false); // ← флаг для контроля двойного запроса на сервер
 

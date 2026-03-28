@@ -1,16 +1,15 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import ToastModal from '../components/ToastModal';
 import "./Login.css";
 import { useAuth } from "../context/useAuth";
 
 function Login() {
-  const { setIsAuthenticated, isLoading, setIsLoading, login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  // const [isLoading, setIsLoading] = useState(false);
-  const [isToastOpen, setIsToastOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,19 +21,14 @@ function Login() {
       return;
     }
 
-    // setIsLoading(true);
+    setIsLoading(true);
     setError("");
 
     try {
       const success = await login(username, password);
 
       if (success) {
-        setIsToastOpen(true);
-        const timer = setTimeout(() => {
-          setIsToastOpen(false);
-          navigate("/");
-          setIsAuthenticated(true);
-        }, 3000);
+        navigate("/"); // Перенаправляем на главную
       } else {
         setError("Неверный логин или пароль");
       }
@@ -110,17 +104,6 @@ function Login() {
           <Link to="/" className="login-footer-link">
             Вернуться на главную
           </Link>
-          {isToastOpen && (<ToastModal
-            // onClose={handleCloseToastModal}
-            isToastOpen={isToastOpen}
-          />)}
-          {/* {isOpen && (
-        <MovieModal
-          movie={selectedMovie}
-          isOpen={isOpen}
-          onCloseModal={handleCloseModal}
-        />
-      )} */}
         </div>
       </div>
     </div>

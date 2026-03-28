@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -12,7 +12,7 @@ import Movies from "./pages/Movies";
 import "./App.css";
 import Login from "./pages/Login";
 import { AppProvider } from "./context";
-import { useAuth } from './context/useAuth';
+import { useAuth } from "./context/useAuth";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -30,15 +30,12 @@ function AppContent() {
   return (
     <div className="app">
       {/* Скрываем Header для неавторизованных пользователей */}
-      {isAuthenticated && (
-        <Header
-        />
-      )}
+      {isAuthenticated && <Header />}
       <main className="main-content">
         <Routes>
           {/* Если не авторизован - показываем только Login страницу */}
           {!isAuthenticated ? (
-            <Route path="*" element={<Login isAuthenticated={isAuthenticated} />} />
+            <Route path="*" element={<Login />} />
           ) : (
             <>
               <Route
@@ -72,6 +69,7 @@ function AppContent() {
   );
 }
 
+// Главный компонент только оборачивает в провайдеры
 function App() {
   return (
     <Router>
@@ -79,7 +77,7 @@ function App() {
         <AppContent />
       </AppProvider>
     </Router>
-  )
+  );
 }
 
 export default App;
