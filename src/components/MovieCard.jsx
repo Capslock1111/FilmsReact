@@ -1,10 +1,21 @@
 import "./MovieCard.css";
+import { motion, AnimatePresence } from 'framer-motion';
 
 function MovieCard({ movie, onHandleSelect }) {
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.5 },
+    },
+  };
   return (
-    <div
+    <motion.div
       className="movie-card"
       onClick={() => onHandleSelect && onHandleSelect(movie)}
+      variants={itemVariants}
     >
       <div className="movie-poster">
         <div className="poster-placeholder">🎬</div>
@@ -35,7 +46,7 @@ function MovieCard({ movie, onHandleSelect }) {
           <button className="btn btn-outline save-btn">Сохранить</button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

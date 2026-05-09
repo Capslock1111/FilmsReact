@@ -1,8 +1,13 @@
 import "./Footer.css";
+import { motion, AnimatePresence } from 'framer-motion';
 
 function Footer() {
   return (
-    <footer className="footer">
+    <motion.footer className="footer"
+      initial={{ opacity: 0, y: 50 }}
+      // animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}>
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
@@ -51,7 +56,7 @@ function Footer() {
           <p>Сделано с ❤️ для киноманов</p>
         </div>
       </div>
-    </footer>
+    </motion.footer>
   );
 }
 

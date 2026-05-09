@@ -1,6 +1,7 @@
 export class ApiService {
   constructor() {
-    this.apiKey = "25f9d95e-7f29-41e5-9350-236e9ac357fa";
+    this.apiKey = import.meta.env.VITE_KINOPOISK_API_KEY;
+    // this.apiKey = "25f9d95e-7f29-41e5-9350-236e9ac357fa";
     this.baseUrl = "https://kinopoiskapiunofficial.tech/api/v2.2";
   }
 

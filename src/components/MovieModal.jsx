@@ -1,11 +1,16 @@
 // src/components/MovieModal/MovieModal.jsx (версия для ДЗ)
 import "./MovieModal.css";
+import { motion, AnimatePresence } from 'framer-motion';
 
 function MovieModal({ movie, onCloseModal, isOpen }) {
   if (!isOpen || !movie) return null;
 
   return (
-    <div className="modal-overlay">
+    <motion.div className="modal-overlay"
+      initial={{ opacity: 0.5, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      // whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}>
       <div className="modal-container">
         {/* Шапка модального окна */}
         <div className="modal-header">
@@ -132,7 +137,7 @@ function MovieModal({ movie, onCloseModal, isOpen }) {
           <button className="btn btn-accent">❤️ Добавить в избранное</button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

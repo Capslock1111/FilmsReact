@@ -4,6 +4,7 @@ import "./Home.css";
 import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import MovieCard from "../components/MovieCard";
+import { motion, AnimatePresence } from 'framer-motion';
 
 function Home({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -69,9 +70,31 @@ function Home({ featuredMovies, setFeaturedMovies }) {
     );
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 1,
+      },
+    },
+  };
+  const itemVariants = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.5 },
+    },
+  };
+
   return (
     <div className="home-page">
-      <section className="hero">
+      <motion.section className="hero"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}>
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">Откройте мир кино с CinemaHub</h1>
@@ -89,46 +112,61 @@ function Home({ featuredMovies, setFeaturedMovies }) {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* О проекте... */}
-      <section id="features" className="section features">
-        <div className="container">
+      <motion.section id="features" className="section features"
+        initial={{ opacity: 0, y: 50 }}
+        // animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <motion.div className="container"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView='visible'>
           <h2 className="section-title">Почему выбирают нас</h2>
           <p className="section-subtitle">
             CinemaHub предлагает уникальный опыт для любителей кино
           </p>
 
           <div className="features-grid">
-            <div className="feature-card">
+            <motion.div className="feature-card"
+              key={1} variants={itemVariants}>
               <div className="feature-icon">🎬</div>
               <h3 className="feature-title">Обширная библиотека</h3>
               <p className="feature-description">
                 Тысячи фильмов различных жанров и годов выпуска из топ-250
               </p>
-            </div>
+            </motion.div>
 
-            <div className="feature-card">
+            <motion.div className="feature-card"
+              key={2} variants={itemVariants}>
               <div className="feature-icon">⭐</div>
               <h3 className="feature-title">Рейтинги и отзывы</h3>
               <p className="feature-description">
                 Реальные оценки от Kinopoisk и IMDb
               </p>
-            </div>
+            </motion.div>
 
-            <div className="feature-card">
+            <motion.div className="feature-card"
+              key={3} variants={itemVariants}>
               <div className="feature-icon">🔍</div>
               <h3 className="feature-title">Умный поиск</h3>
               <p className="feature-description">
                 Находите фильмы по жанру, году, рейтингу и другим параметрам
               </p>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Популярные фильмы */}
-      <section className="section featured-movies">
+      <motion.section className="section featured-movies"
+        initial={{ opacity: 0, y: 50 }}
+        // animate={{ opacity: 1, y: 0 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}>
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Рекомендуем посмотреть</h2>
@@ -138,31 +176,37 @@ function Home({ featuredMovies, setFeaturedMovies }) {
           </div>
 
           {error ? (
-            <div className="error-container">
+            <div className="error-container"
+            >
               <p className="error-message">{error}</p>
               <p className="error-hint">Используются демо-данные</p>
             </div>
           ) : null}
 
-          <div className="movies-grid">
+          <motion.div className="movies-grid"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView='visible'>
             {featuredMovies.map((movie) => (
               <MovieCard
                 key={movie.id}
                 movie={movie}
                 onHandleSelect={handleMovieSelect}
+                variants={itemVariants}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Модальное окно с деталями фильма */}
       <MovieModal
         movie={selectedMovie}
         isOpen={isModalOpen}
         onCloseModal={handleCloseModal}
+
       />
-    </div>
+    </div >
   );
 }
 
