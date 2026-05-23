@@ -1,5 +1,6 @@
 import "./Footer.css";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
+
 
 function Footer() {
   return (
@@ -8,8 +9,8 @@ function Footer() {
     >
       <motion.div initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-        viewport={{ once: true, amount: 1 }}>
+        transition={{ duration: 1, ease: "easeInOut", }}
+        viewport={{ once: true, amount: 0.91 }}>
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">
