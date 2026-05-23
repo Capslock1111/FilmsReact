@@ -1,4 +1,8 @@
+import { RawKinopoiskMovie, Movie } from '../types/movie';
 export class ApiService {
+  public baseUrl: string;
+  public apiKey: string;
+
   constructor() {
     this.apiKey = import.meta.env.VITE_KINOPOISK_API_KEY;
     // this.apiKey = "25f9d95e-7f29-41e5-9350-236e9ac357fa";
@@ -11,7 +15,7 @@ export class ApiService {
    * @param {number} page - параметр запроса: страница
    * @returns {Promise<Array>} - что получаем на выходе
    */
-  async getTopFilms(type = "TOP_250_BEST_FILMS", page = 1) {
+  async getTopFilms(type: string = "TOP_250_BEST_FILMS", page = 1,): Promise<Movie[]> {
     try {
       const url = `${this.baseUrl}/films/top?type=${type}&page=${page}`;
       console.log("📡 Запрос к Kinopoisk:", url);
@@ -25,12 +29,11 @@ export class ApiService {
       }
 
       const data = await response.json();
-      console.log("📦 Ответ Kinopoisk:", data);
 
-      return data.films.map((film) => this.formatFilm(film));
+      return data.films.map((film: RawKinopoiskMovie) => this.formatFilm(film));
     } catch (error) {
       console.error("❌ Ошибка при получении топ фильмов:", error);
-      return this.getFallbackFilms();
+      return this.getFallbackMovies();
     }
   }
 
@@ -40,7 +43,7 @@ export class ApiService {
    * @param {number} page - Страница - параметр
    * @returns {Promise<Array>}
    */
-  async searchFilms(keyword, page = 1) {
+  async searchFilms(keyword: string, page = 1) {
     try {
       const url = `${this.baseUrl}/films?keyword=${encodeURIComponent(keyword)}&page=${page}`;
 
@@ -53,7 +56,7 @@ export class ApiService {
       }
 
       const data = await response.json();
-      return data.items.map((film) => this.formatFilm(film));
+      return data.items.map((film: RawKinopoiskMovie) => this.formatFilm(film));
     } catch (error) {
       console.error("❌ Ошибка поиска:", error);
       return [];
@@ -66,7 +69,7 @@ export class ApiService {
    * @param {number} page - Страница
    * @returns {Promise<Array>}
    */
-  async getFilmsByYear(year, page = 1) {
+  async getFilmsByYear(year: number, page = 1) {
     try {
       const url = `${this.baseUrl}/films?yearFrom=${year}&yearTo=${year}&page=${page}`;
 
@@ -79,7 +82,7 @@ export class ApiService {
       }
 
       const data = await response.json();
-      return data.items.map((film) => this.formatFilm(film));
+      return data.items.map((film: RawKinopoiskMovie) => this.formatFilm(film));
     } catch (error) {
       console.error("❌ Ошибка по году:", error);
       return [];
@@ -91,37 +94,15 @@ export class ApiService {
    * @param {number} filmId - ID фильма
    * @returns {Promise<Object>}
    */
-  async getFilmDetails(filmId) {
-    try {
-      const url = `${this.baseUrl}/films/${filmId}`;
 
-      const response = await fetch(url, {
-        headers: this.getHeaders(),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return this.formatFilmDetails(data);
-    } catch (error) {
-      console.error("❌ Ошибка деталей:", error);
-      return null;
-    }
-  }
-
-  /**
-   * Преобразовать формат Kinopoisk в наш
-   */
-  formatFilm(movie) {
+  formatFilm(movie: RawKinopoiskMovie): Movie {
     return {
       // Основные поля
-      id: movie.filmId || movie.kinopoiskId,
-      title: movie.nameRu || movie.nameEn,
+      id: movie.filmId,
+      title: movie.nameRu,
       originalTitle: movie.nameEn,
       year: movie.year,
-      rating: movie.rating || movie.ratingKinopoisk || movie.ratingImdb,
+      rating: movie.rating,
 
       // Для нашего приложения
       duration: `${movie.filmLength} мин`,
@@ -142,30 +123,7 @@ export class ApiService {
     };
   }
 
-  /**
-   * Детали фильма
-   */
-  formatFilmDetails(details) {
-    return {
-      ...this.formatFilm(details),
-      slogan: details.slogan,
-      shortDescription: details.shortDescription,
-      editorAnnotation: details.editorAnnotation,
-      ratingAgeLimits: details.ratingAgeLimits,
-      ratingKinopoisk: details.ratingKinopoisk,
-      ratingImdb: details.ratingImdb,
-      ratingFilmCritics: details.ratingFilmCritics,
-      webUrl: details.webUrl,
-      startYear: details.startYear,
-      endYear: details.endYear,
-      reviewsCount: details.reviewsCount,
-      // И много других полей...
-    };
-  }
 
-  /**
-   * Fallback данные
-   */
   getFallbackMovies() {
     console.log("🔄 Использую fallback данные");
     return [
@@ -180,6 +138,7 @@ export class ApiService {
           "Пол Эджкомб — начальник блока смертников в тюрьме «Холодная гора»...",
         genres: ["драма", "фэнтези", "криминал"],
         poster: "https://kinopoiskapiunofficial.tech/images/posters/kp/435.jpg",
+        isSeries: false,
       },
       {
         id: 326,
@@ -192,6 +151,7 @@ export class ApiService {
           "Бухгалтер Энди Дюфрейн обвинен в убийстве собственной жены и ее любовника...",
         genres: ["драма"],
         poster: "https://kinopoiskapiunofficial.tech/images/posters/kp/326.jpg",
+        isSeries: false,
       },
       {
         id: 448,
@@ -204,6 +164,7 @@ export class ApiService {
           "От лица главного героя Форреста Гампа, слабоумного безобидного человека...",
         genres: ["драма", "комедия", "мелодрама"],
         poster: "https://kinopoiskapiunofficial.tech/images/posters/kp/448.jpg",
+        isSeries: false,
       },
     ];
   }

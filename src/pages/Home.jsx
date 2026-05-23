@@ -94,7 +94,8 @@ function Home({ featuredMovies, setFeaturedMovies }) {
       <motion.section className="hero"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}>
+        transition={{ duration: 1 }}
+        viewport={{ once: true }}>
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">Откройте мир кино с CinemaHub</h1>
@@ -120,11 +121,13 @@ function Home({ featuredMovies, setFeaturedMovies }) {
         // animate={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
       >
         <motion.div className="container"
           variants={containerVariants}
           initial="hidden"
-          whileInView='visible'>
+          whileInView='visible'
+          viewport={{ once: true, amount: 0.2 }}>
           <h2 className="section-title">Почему выбирают нас</h2>
           <p className="section-subtitle">
             CinemaHub предлагает уникальный опыт для любителей кино
@@ -132,7 +135,8 @@ function Home({ featuredMovies, setFeaturedMovies }) {
 
           <div className="features-grid">
             <motion.div className="feature-card"
-              key={1} variants={itemVariants}>
+              key={1} variants={itemVariants}
+            >
               <div className="feature-icon">🎬</div>
               <h3 className="feature-title">Обширная библиотека</h3>
               <p className="feature-description">
@@ -166,7 +170,8 @@ function Home({ featuredMovies, setFeaturedMovies }) {
         initial={{ opacity: 0, y: 50 }}
         // animate={{ opacity: 1, y: 0 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}>
+        transition={{ duration: 1 }}
+        viewport={{ once: true, amount: 0.2 }}>
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Рекомендуем посмотреть</h2>
@@ -186,7 +191,8 @@ function Home({ featuredMovies, setFeaturedMovies }) {
           <motion.div className="movies-grid"
             variants={containerVariants}
             initial="hidden"
-            whileInView='visible'>
+            whileInView='visible'
+            viewport={{ once: true, amount: 0.2 }}>
             {featuredMovies.map((movie) => (
               <MovieCard
                 key={movie.id}

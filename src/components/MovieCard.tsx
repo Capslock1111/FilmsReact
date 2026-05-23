@@ -1,7 +1,12 @@
 import "./MovieCard.css";
-import { motion, AnimatePresence } from 'framer-motion';
+import { Movie } from '../types/movie';
+import { motion } from 'framer-motion';
 
-function MovieCard({ movie, onHandleSelect }) {
+interface MovieCardProps {
+  movie: Movie;
+  onHandleSelect?: (movie: Movie) => void;
+}
+function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
   const itemVariants = {
     hidden: {
       opacity: 0,
@@ -19,7 +24,7 @@ function MovieCard({ movie, onHandleSelect }) {
     >
       <div className="movie-poster">
         <div className="poster-placeholder">🎬</div>
-        <div className="movie-rating">⭐ {movie.rating}</div>
+        <div className="movie-rating">⭐ {movie.rating || 'N/A'}</div>
       </div>
 
       <div className="movie-content">

@@ -1,4 +1,5 @@
 class AuthService {
+  public validCredentials: { username: string; password: string };
   constructor() {
     // Статичные данные для входа
     this.validCredentials = {
@@ -24,7 +25,7 @@ class AuthService {
    * @param {string} password
    * @returns {Promise<boolean>}
    */
-  async login(username, password) {
+  async login(username: string, password: string) {
     // Имитация задержки сервера (для реализма)
     await new Promise((resolve) => setTimeout(resolve, 500));
 
