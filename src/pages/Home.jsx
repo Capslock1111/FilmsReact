@@ -5,6 +5,7 @@ import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import MovieCard from "../components/MovieCard";
 import { motion, AnimatePresence } from 'framer-motion';
+import Footer from "../components/Footer";
 
 function Home({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -204,6 +205,8 @@ function Home({ featuredMovies, setFeaturedMovies }) {
           </motion.div>
         </div>
       </motion.section>
+
+      <Footer />
 
       {/* Модальное окно с деталями фильма */}
       <MovieModal

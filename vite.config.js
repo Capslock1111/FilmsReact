@@ -9,4 +9,7 @@ export default defineConfig({
   plugins: [react()],
   // ✅ Если есть base, убедитесь что он правильный
   base: '/FilmsReact',
+  esbuild: {
+    drop: ['console', 'debugger']
+  }
 })

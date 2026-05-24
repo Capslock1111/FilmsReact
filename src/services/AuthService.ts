@@ -1,5 +1,6 @@
 class AuthService {
-  public validCredentials: { username: string; password: string };
+  private validCredentials: { username: string; password: string };
+  private STORAGE_KEY: string;
   constructor() {
     // Статичные данные для входа
     this.validCredentials = {

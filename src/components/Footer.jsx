@@ -10,7 +10,7 @@ function Footer() {
       <motion.div initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeInOut", }}
-        viewport={{ once: true, amount: 0.91 }}>
+        viewport={{ once: true, amount: 0.1 }}>
         <div className="container">
           <div className="footer-content">
             <div className="footer-section">

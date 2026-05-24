@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import { useState } from "react";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import "./App.css";
@@ -64,7 +63,7 @@ function AppContent() {
       </main>
 
       {/* Скрываем футер для не авторизованных пользователей */}
-      {isAuthenticated && <Footer />}
+      {/* {isAuthenticated && <Footer />} */}
     </div>
   );
 }

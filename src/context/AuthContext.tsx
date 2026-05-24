@@ -1,11 +1,22 @@
 import { createContext, useState, useEffect } from "react";
 import { authService } from "../services/AuthService";
+import { ReactNode } from "react";
 
+interface AuthContextType {
+  isAuthenticated: boolean,
+  isLoading: boolean,
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
 // 1. Создаём контекст
-export const AuthContext = createContext();
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // 2. Создаём провайдер
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,7 +32,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Функция входа
-  const login = async (username, password) => {
+  const login = async (username: string, password: string) => {
     const success = await authService.login(username, password);
     if (success) {
       setIsAuthenticated(true);
@@ -43,5 +54,5 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={ value }> { children } </AuthContext.Provider>;
 }

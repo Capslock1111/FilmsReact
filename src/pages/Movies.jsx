@@ -5,6 +5,7 @@ import LogService from "../services/LogService";
 import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import { useSearch } from "../context/useSearch";
+import Footer from "../components/Footer";
 
 function Movies({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -221,7 +222,7 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
           moviesData
         )}
       </div>
-
+      <Footer />
       {isOpen && (
         <MovieModal
           movie={selectedMovie}
@@ -229,6 +230,7 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
           onCloseModal={handleCloseModal}
         />
       )}
+
     </div>
   );
 }
