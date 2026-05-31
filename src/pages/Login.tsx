@@ -3,42 +3,75 @@ import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../context/useAuth";
 import { SubmitEvent } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [password, setPassword] = useState("");
+  const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onBlur'
+  });
 
-    // Валидация
-    if (!username.trim() || !password.trim()) {
-      setError("Заполните все поля");
-      return;
-    }
-
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    setError("");
+    setServerError('');
 
     try {
-      const success = await login(username, password);
-
+      const success = await login(data.username, data.password);
       if (success) {
-        navigate("/"); // Перенаправляем на главную
+        navigate('/');
       } else {
-        setError("Неверный логин или пароль");
+        setServerError('Неверный логин или пароль');
       }
     } catch (err) {
-      setError(`Ошибка при входе ${err}. Попробуйте позже.`);
+      setServerError('Ошибка при входе. Попробуйте позже.');
     } finally {
       setIsLoading(false);
     }
   };
+  // const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+
+  //   // Валидация
+  //   if (!username.trim() || !password.trim()) {
+  //     setError("Заполните все поля");
+  //     return;
+  //   }
+  //   if (password.length < 6) {
+  //     setError("Пароль >=6 символов");
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+  //   setError("");
+
+  //   try {
+  //     const success = await login(username, password);
+
+  //     if (success) {
+  //       navigate("/"); // Перенаправляем на главную
+  //     } else {
+  //       setError("Неверный логин или пароль");
+  //     }
+  //   } catch (err) {
+  //     setError(`Ошибка при входе ${err}. Попробуйте позже.`);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className="login-page">
@@ -52,9 +85,9 @@ function Login() {
           <p className="login-subtitle">Войдите в свой аккаунт</p>
         </div>
 
-        {error && <div className="login-error">⚠️ {error}</div>}
+        {serverError && <div className="login-error">⚠️ {serverError}</div>}
 
-        <form className="login-form" onSubmit={handleSubmit}>
+        <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
             <label htmlFor="username" className="form-label">
               Имя пользователя
@@ -62,12 +95,14 @@ function Login() {
             <input
               type="text"
               id="username"
-              className="form-input"
+              className={`form-input`}
               placeholder="Введите логин"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               disabled={isLoading}
+              {...register('username')}
             />
+            {errors.username && (
+              <p className="error-message">{errors.username.message}</p>
+            )}
           </div>
 
           <div className="form-group">
@@ -77,12 +112,16 @@ function Login() {
             <input
               type="password"
               id="password"
-              className="form-input"
+              className={`form-input`}
               placeholder="Введите пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              // value={password}
+              // onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
+              {...register('password')}
             />
+            {errors.password && (
+              <p className="error-message">{errors.password.message}</p>
+            )}
           </div>
 
           <button
@@ -97,7 +136,7 @@ function Login() {
         <div className="login-hint">
           <p>Подсказка для входа:</p>
           <p>
-            Логин: <strong>admin</strong> / Пароль: <strong>1111</strong>
+            Логин: <strong>admin</strong> / Пароль: <strong>11111</strong>
           </p>
         </div>
 

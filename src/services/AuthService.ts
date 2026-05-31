@@ -5,7 +5,7 @@ class AuthService {
     // Статичные данные для входа
     this.validCredentials = {
       username: "admin",
-      password: "1111",
+      password: "11111",
     };
 
     // Ключ для localStorage

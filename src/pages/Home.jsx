@@ -7,11 +7,14 @@ import MovieCard from "../components/MovieCard";
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from "../components/Footer";
 
+
 function Home({ featuredMovies, setFeaturedMovies }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
 
   useEffect(() => {
     const loadFeaturedMovies = async () => {
@@ -20,7 +23,7 @@ function Home({ featuredMovies, setFeaturedMovies }) {
 
         // Загружаем топ-250 фильмов с API (так же как в Movies.jsx)
         const topFilms = await apiService.getTopFilms("TOP_250_BEST_FILMS", 1);
-
+        debugger;
         if (topFilms && topFilms.length > 0) {
           // Алгоритм Тасования Фишера-Йейтса (Fisher-Yates Shuffle) - для случайного выбора трех фильмов
           const shuffled = [...topFilms];

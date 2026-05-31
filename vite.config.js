@@ -10,6 +10,6 @@ export default defineConfig({
   // ✅ Если есть base, убедитесь что он правильный
   base: '/FilmsReact',
   esbuild: {
-    drop: ['console', 'debugger']
+    drop: ['console',],
   }
 })
