@@ -1,15 +1,17 @@
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
 import { useState } from "react";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Movies from "./pages/Movies";
 import "./App.css";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import { AppProvider } from "./context";
 import { useAuth } from "./context/useAuth";
 
@@ -28,14 +30,18 @@ function AppContent() {
 
   return (
     <div className="app">
-      {/* Скрываем Header для неавторизованных пользователей */}
       {isAuthenticated && <Header />}
       <main className="main-content">
         <Routes>
-          {/* Если не авторизован - показываем только Login страницу */}
           {!isAuthenticated ? (
-            <Route path="*" element={<Login />} />
+            // ✅ Неавторизованные: доступны только login и register
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<Navigate to="/login" />} />
+            </>
           ) : (
+            // ✅ Авторизованные: доступны все страницы
             <>
               <Route
                 path="/"
@@ -55,20 +61,16 @@ function AppContent() {
                   />
                 }
               />
-              {/* Перенаправление на главную для несуществующих маршрутов. path="*" - значение по умолчанию  */}
               <Route path="*" element={<Navigate to="/" />} />
             </>
           )}
         </Routes>
       </main>
-
-      {/* Скрываем футер для не авторизованных пользователей */}
-      {/* {isAuthenticated && <Footer />} */}
+      {isAuthenticated && <Footer />}
     </div>
   );
 }
 
-// Главный компонент только оборачивает в провайдеры
 function App() {
   return (
     <Router>

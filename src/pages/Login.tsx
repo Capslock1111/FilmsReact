@@ -141,8 +141,8 @@ function Login() {
         </div>
 
         <div className="login-footer">
-          <Link to="/" className="login-footer-link">
-            Вернуться на главную
+          <Link to="/register" className="login-footer-link">
+            Нет аккаунта? Зарегистрироваться
           </Link>
         </div>
       </div>

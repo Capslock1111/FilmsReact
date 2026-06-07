@@ -23,7 +23,6 @@ function Home({ featuredMovies, setFeaturedMovies }) {
 
         // Загружаем топ-250 фильмов с API (так же как в Movies.jsx)
         const topFilms = await apiService.getTopFilms("TOP_250_BEST_FILMS", 1);
-        debugger;
         if (topFilms && topFilms.length > 0) {
           // Алгоритм Тасования Фишера-Йейтса (Fisher-Yates Shuffle) - для случайного выбора трех фильмов
           const shuffled = [...topFilms];

@@ -24,6 +24,7 @@ export class ApiService {
         headers: this.getHeaders(),
       });
 
+
       if (!response.ok) {
         throw new Error(`Ошибка HTTP: ${response.status}`);
       }
