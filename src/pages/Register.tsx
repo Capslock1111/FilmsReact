@@ -1,52 +1,47 @@
-// src/pages/Register.jsx
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import "./Register.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterFormData } from "../schemas/register.schema";
+import "./Register.css";
+import { authService } from "../services/AuthService";
+import { GENRES as genres } from "../constants/genres";
 
-const genres = [
-  'Комедия',
-  'Драма',
-  'Боевик',
-  'Ужасы',
-  'Фантастика',
-  'Триллер',
-  'Мелодрама',
-  'Детектив',
-  'Приключения',
-  'Анимация'
-];
-function Register() {
+// Список жанров для выпадающего списк
+
+export default function Register() {
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const [serverError, setServerError] = useState<string>('');
+  const [serverError, setServerError] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>("");
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Проверка размера (2MB)
     if (file.size > 2 * 1024 * 1024) {
-      alert('Файл слишком большой. Максимум 2MB');
+      alert("Файл слишком большой. Максимум 2MB");
+      e.target.value = "";
       return;
     }
 
-    // Проверка типа
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-      alert('Поддерживаются только JPEG, PNG, WEBP');
-      return;
-    }
+    // ✅ Показываем сообщение о загрузке
+    setUploadStatus("Загрузка...");
 
-    setAvatarFile(file);
-
-    // Превью
     const reader = new FileReader();
     reader.onloadend = () => {
       setAvatarPreview(reader.result as string);
+      setUploadStatus("Файл загружен! ✅");
+
+      // Скрываем сообщение через 2 секунды
+      setTimeout(() => setUploadStatus(""), 2000);
+    };
+    reader.onerror = () => {
+      setUploadStatus("Ошибка загрузки");
+      setTimeout(() => setUploadStatus(""), 2000);
     };
     reader.readAsDataURL(file);
   };
@@ -54,43 +49,35 @@ function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    watch
+    formState: { errors, isValid },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-    mode: 'onBlur',
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      birthDate: '',
-      gender: '',
-      favoriteGenre: '',
-      agreeToTerms: false
-    }
+    mode: "onBlur",
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const handleFormSubmit = (data: RegisterFormData) => {
+    console.log("🔥 onSubmit вызван!", data);
     setIsLoading(true);
-    setServerError('');
+    setServerError("");
 
     try {
-      // Сохраняем данные пользователя в localStorage
-      const userData = {
+      // Регистрация через AuthService
+      const success = authService.register({
         username: data.username,
         email: data.email,
-        avatar: avatarPreview, // Base64 строка
-        registeredAt: new Date().toISOString()
-      };
+        password: data.password,
+        avatar: avatarPreview,
+      });
 
-      // Сохраняем в localStorage
-      localStorage.setItem('cinemahub_user', JSON.stringify(userData));
-
-      console.log('Регистрация:', userData);
-      navigate('/login');
+      if (success) {
+        console.log("✅ Пользователь зарегистрирован!");
+        // Переход на страницу логина
+        navigate("/login");
+      } else {
+        setServerError("Пользователь с таким именем уже существует");
+      }
     } catch (err) {
-      setServerError('Ошибка при регистрации. Попробуйте позже.');
+      setServerError("Ошибка при регистрации. Попробуйте позже.");
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +94,10 @@ function Register() {
           <p className="register-subtitle">Стань частью киносообщества</p>
         </div>
 
-        <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="register-form"
+          onSubmit={handleSubmit(handleFormSubmit)}
+        >
           {/* Username */}
           <div className="form-group">
             <label htmlFor="username" className="form-label">
@@ -118,8 +108,8 @@ function Register() {
               id="username"
               className={`form-input ${errors.username ? "error" : ""}`}
               placeholder="Введите логин"
-              {...register('username')}
               disabled={isLoading}
+              {...register("username")}
             />
             {errors.username && (
               <p className="error-message">{errors.username.message}</p>
@@ -136,10 +126,12 @@ function Register() {
               id="email"
               className={`form-input ${errors.email ? "error" : ""}`}
               placeholder="example@mail.com"
-              {...register('email')}
               disabled={isLoading}
+              {...register("email")}
             />
-            {errors.email && <p className="error-message">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
+            )}
           </div>
 
           {/* Password */}
@@ -152,8 +144,8 @@ function Register() {
               id="password"
               className={`form-input ${errors.password ? "error" : ""}`}
               placeholder="Минимум 6 символов"
-              {...register('password')}
               disabled={isLoading}
+              {...register("password")}
             />
             {errors.password && (
               <p className="error-message">{errors.password.message}</p>
@@ -170,8 +162,8 @@ function Register() {
               id="confirmPassword"
               className={`form-input ${errors.confirmPassword ? "error" : ""}`}
               placeholder="Повторите пароль"
-              {...register('confirmPassword')}
               disabled={isLoading}
+              {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
               <p className="error-message">{errors.confirmPassword.message}</p>
@@ -187,8 +179,8 @@ function Register() {
               type="date"
               id="birthDate"
               className="form-input"
-              {...register('birthDate')}
               disabled={isLoading}
+              {...register("birthDate")}
             />
           </div>
 
@@ -200,8 +192,8 @@ function Register() {
                 <input
                   type="radio"
                   value="male"
-                  {...register('gender')}
                   disabled={isLoading}
+                  {...register("gender")}
                 />
                 <span>Мужской</span>
               </label>
@@ -209,8 +201,8 @@ function Register() {
                 <input
                   type="radio"
                   value="female"
-                  {...register('gender')}
                   disabled={isLoading}
+                  {...register("gender")}
                 />
                 <span>Женский</span>
               </label>
@@ -218,8 +210,8 @@ function Register() {
                 <input
                   type="radio"
                   value="other"
-                  {...register('gender')}
                   disabled={isLoading}
+                  {...register("gender")}
                 />
                 <span>Другой</span>
               </label>
@@ -234,8 +226,8 @@ function Register() {
             <select
               id="favoriteGenre"
               className="form-select"
-              {...register('favoriteGenre')}
               disabled={isLoading}
+              {...register("favoriteGenre")}
             >
               <option value="">Выберите жанр</option>
               {genres.map((genre) => (
@@ -251,7 +243,15 @@ function Register() {
             <label className="form-label">Аватар (необязательно)</label>
             <div className="avatar-upload">
               <div className="avatar-preview" id="avatarPreview">
-                <span className="avatar-placeholder">👤</span>
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar preview"
+                    className="avatar-image"
+                  />
+                ) : (
+                  <span className="avatar-placeholder">👤</span>
+                )}
               </div>
               <input
                 type="file"
@@ -263,6 +263,9 @@ function Register() {
               />
               <small className="form-hint">PNG, JPG или WEBP, до 2MB</small>
             </div>
+            {uploadStatus && (
+              <div className="upload-status">{uploadStatus}</div>
+            )}
           </div>
 
           {/* Terms Agreement */}
@@ -270,8 +273,8 @@ function Register() {
             <label className="checkbox-label">
               <input
                 type="checkbox"
-                {...register('agreeToTerms')}
                 disabled={isLoading}
+                {...register("agreeToTerms")}
               />
               <span>
                 Я соглашаюсь с{" "}
@@ -292,7 +295,7 @@ function Register() {
           <button
             type="submit"
             className="btn btn-accent register-btn"
-            disabled={isLoading}
+          // disabled={isLoading}
           >
             {isLoading ? "Регистрация..." : "Зарегистрироваться"}
           </button>
@@ -307,5 +310,3 @@ function Register() {
     </div>
   );
 }
-
-export default Register;

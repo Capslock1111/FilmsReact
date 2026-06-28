@@ -1,77 +1,45 @@
-import { useState } from "react";
+import { useState, SubmitEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
 import { useAuth } from "../context/useAuth";
-import { SubmitEvent } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 
 function Login() {
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
 
   const navigate = useNavigate();
 
+  // Настройка формы
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: 'onBlur'
+    mode: "onBlur", // валидация при потере фокуса
   });
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
-    setServerError('');
+    setServerError("");
 
     try {
       const success = await login(data.username, data.password);
       if (success) {
-        navigate('/');
+        navigate("/");
       } else {
-        setServerError('Неверный логин или пароль');
+        setServerError("Неверный логин или пароль");
       }
     } catch (err) {
-      setServerError('Ошибка при входе. Попробуйте позже.');
+      setServerError("Ошибка при входе. Попробуйте позже.");
     } finally {
       setIsLoading(false);
     }
   };
-  // const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   // Валидация
-  //   if (!username.trim() || !password.trim()) {
-  //     setError("Заполните все поля");
-  //     return;
-  //   }
-  //   if (password.length < 6) {
-  //     setError("Пароль >=6 символов");
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-  //   setError("");
-
-  //   try {
-  //     const success = await login(username, password);
-
-  //     if (success) {
-  //       navigate("/"); // Перенаправляем на главную
-  //     } else {
-  //       setError("Неверный логин или пароль");
-  //     }
-  //   } catch (err) {
-  //     setError(`Ошибка при входе ${err}. Попробуйте позже.`);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   return (
     <div className="login-page">
@@ -98,7 +66,7 @@ function Login() {
               className={`form-input`}
               placeholder="Введите логин"
               disabled={isLoading}
-              {...register('username')}
+              {...register("username")}
             />
             {errors.username && (
               <p className="error-message">{errors.username.message}</p>
@@ -114,10 +82,8 @@ function Login() {
               id="password"
               className={`form-input`}
               placeholder="Введите пароль"
-              // value={password}
-              // onChange={(e) => setPassword(e.target.value)}
               disabled={isLoading}
-              {...register('password')}
+              {...register("password")}
             />
             {errors.password && (
               <p className="error-message">{errors.password.message}</p>

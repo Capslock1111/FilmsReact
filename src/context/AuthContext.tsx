@@ -3,56 +3,77 @@ import { authService } from "../services/AuthService";
 import { ReactNode } from "react";
 
 interface AuthContextType {
-  isAuthenticated: boolean,
-  isLoading: boolean,
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  user: any | null;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
+  setUser: (user: any) => void; // <-- Добавляем
 }
 
 interface AuthProviderProps {
   children: ReactNode;
 }
-// 1. Создаём контекст
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 2. Создаём провайдер
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUserState] = useState<any | null>(null); // <-- Переименовали
 
-  // Проверяем авторизацию при загрузке
   useEffect(() => {
     const checkAuth = () => {
       const auth = authService.isAuthenticated();
       setIsAuthenticated(auth);
+
+      if (auth) {
+        const currentUser = authService.getCurrentUser();
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+
       setIsLoading(false);
     };
 
     checkAuth();
   }, []);
 
-  // Функция входа
   const login = async (username: string, password: string) => {
     const success = await authService.login(username, password);
     if (success) {
       setIsAuthenticated(true);
+      const currentUser = authService.getCurrentUser();
+      setUser(currentUser);
     }
     return success;
   };
 
-  // Функция выхода
   const logout = () => {
     authService.logout();
     setIsAuthenticated(false);
+    setUser(null);
   };
 
-  // Значения, которые будут доступны в контексте
+  // Функция для обновления пользователя извне (из Profile)
+  const setUser = (userData: any) => {
+    setUserState(userData);
+    if (userData) {
+      authService.setCurrentUser(userData);
+    }
+  };
+
   const value = {
     isAuthenticated,
     isLoading,
+    user,
     login,
     logout,
+    setUser,
   };
 
-  return <AuthContext.Provider value={ value }> { children } </AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

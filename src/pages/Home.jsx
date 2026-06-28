@@ -208,7 +208,7 @@ function Home({ featuredMovies, setFeaturedMovies }) {
         </div>
       </motion.section>
 
-      <Footer />
+
 
       {/* Модальное окно с деталями фильма */}
       <MovieModal

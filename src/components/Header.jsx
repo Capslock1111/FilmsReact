@@ -9,7 +9,7 @@ import { useTheme } from "../context/useTheme";
 function Header() {
   const inputRef = useRef(null);
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { searchQuery, setSearchQuery } = useSearch();
   const { theme, toggleTheme } = useTheme();
 
@@ -112,6 +112,22 @@ function Header() {
               className="search-btn"
             >
               🔍
+            </Link>
+          </div>
+          {/* Аватар пользователя */}
+          <div className="header-user">
+            <Link to="/profile" title="Редактировать профиль">
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={user.username}
+                  className="user-avatar"
+                />
+              ) : (
+                <div className="user-avatar-placeholder">
+                  {user?.username?.[0]?.toUpperCase() || "👤"}
+                </div>
+              )}
             </Link>
           </div>
           {/* Добавляем кнопку выхода из аккаунта (сброс localStorage) */}

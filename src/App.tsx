@@ -1,5 +1,5 @@
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AppProvider } from "./context";
 import { useAuth } from "./context/useAuth";
+import Profile from "./pages/Profile";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -59,6 +60,12 @@ function AppContent() {
                     featuredMovies={featuredMovies}
                     setFeaturedMovies={setFeaturedMovies}
                   />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <Profile />
                 }
               />
               <Route path="*" element={<Navigate to="/" />} />

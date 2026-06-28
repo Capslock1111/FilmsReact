@@ -222,7 +222,6 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
           moviesData
         )}
       </div>
-      <Footer />
       {isOpen && (
         <MovieModal
           movie={selectedMovie}
