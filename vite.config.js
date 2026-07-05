@@ -8,6 +8,18 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    include: ['src/**/*.test.tsx'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
+  },
   server: {
     port: 3000,
     host: true,
