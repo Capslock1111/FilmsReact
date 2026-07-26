@@ -2,7 +2,9 @@
     "compilerOptions": {
         "types": [
             "vite/client",
-            "vitest/globals"
+            "vitest/globals",
+            "jest",
+            "@testing-library/jest-dom"
         ],
         "target": "ES2022",
         "lib": [
@@ -27,5 +29,5 @@
     },
     "include": [
         "src"
-    ]
+    ],
 }

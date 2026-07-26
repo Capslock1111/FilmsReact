@@ -22,7 +22,8 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.76.1",
     "react-router-dom": "^7.12.0",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -30,6 +31,8 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.2.0",
@@ -39,9 +42,30 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "gh-pages": "^6.3.0",
     "globals": "^16.5.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.4.2",
     "jsdom": "^29.1.1",
+    "ts-jest": "^29.4.11",
     "typescript": "^6.0.3",
     "vite": "^7.2.4",
     "vitest": "^4.1.9"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.ts"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/__mocks__/fileMock.js"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.ts?(x)",
+      "**/?(*.)+(spec|test).ts?(x)"
+    ]
   }
 }
