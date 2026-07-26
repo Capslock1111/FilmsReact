@@ -3,15 +3,17 @@ import { useRef, useEffect } from "react";
 import "./Header.css";
 import LogService from "../services/LogService";
 import { useAuth } from "../context/useAuth";
-import { useSearch } from "../context/useSearch";
-import { useTheme } from "../context/useTheme";
+import { useThemeStore } from "../store/themeStore";
+import { useSearchStore } from "../store/searchStore";
 
 function Header() {
   const inputRef = useRef(null);
   const location = useLocation();
   const { logout, user } = useAuth();
-  const { searchQuery, setSearchQuery } = useSearch();
-  const { theme, toggleTheme } = useTheme();
+  const searchQuery = useSearchStore((state) => state.query);
+  const setSearchQuery = useSearchStore((state) => state.setQuery);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  const theme = useThemeStore((state) => state.theme);
 
   const handleSearchClick = () => {
     if (inputRef.current) {
@@ -92,6 +94,11 @@ function Header() {
                   }
                 >
                   Фильмы
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/favorites" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+                  ❤️ Избранное
                 </NavLink>
               </li>
             </ul>

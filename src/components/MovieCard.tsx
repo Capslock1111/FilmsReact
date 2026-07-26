@@ -1,12 +1,23 @@
 import "./MovieCard.css";
 import { Movie } from '../types/movie';
 import { motion } from 'framer-motion';
+import { useFavouritesState } from "../store/favouritesStore";
 
 interface MovieCardProps {
   movie: Movie;
   onHandleSelect?: (movie: Movie) => void;
 }
 function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
+  const { addFavourite, removeFavourite, isFavourite } = useFavouritesState();
+  const isFav = isFavourite(movie.id);
+
+  const handleFavouriteToggle = () => {
+    if (isFav) {
+      removeFavourite(movie.id);
+    } else {
+      addFavourite(movie);
+    }
+  };
   const itemVariants = {
     hidden: {
       opacity: 0,
@@ -47,8 +58,12 @@ function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
         </div>
 
         <div className="movie-actions">
+          <button onClick={handleFavouriteToggle} className="btn btn-outline">
+            {isFav ? "❤️" : "🤍"}
+          </button>
           <button className="btn btn-accent watch-btn">Смотреть</button>
           <button className="btn btn-outline save-btn">Сохранить</button>
+
         </div>
       </div>
     </motion.div>

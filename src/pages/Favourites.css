@@ -1,0 +1,99 @@
+/* src/pages/Favorites.css */
+.favorites-page {
+    padding: 2rem 0;
+    min-height: 70vh;
+}
+
+.favorites-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.favorites-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.favorites-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.favorites-count {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+}
+
+.favorites-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow, 0 4px 12px rgba(0, 0, 0, 0.05));
+}
+
+.favorites-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.favorites-empty-title {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.favorites-empty-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.favorites-grid .movie-card {
+    height: 100%;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .favorites-title {
+        font-size: 2rem;
+    }
+
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .favorites-title {
+        font-size: 1.6rem;
+    }
+
+    .favorites-grid {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+
+    .favorites-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

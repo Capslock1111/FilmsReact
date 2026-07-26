@@ -15,10 +15,18 @@ import Register from "./pages/Register";
 import { AppProvider } from "./context";
 import { useAuth } from "./context/useAuth";
 import Profile from "./pages/Profile";
+import { useThemeStore } from "./store/themeStore";
+import { useEffect } from "react";
+import Favourites from "./pages/favourites";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const [featuredMovies, setFeaturedMovies] = useState([]);
+  const theme = useThemeStore((state) => state.theme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   if (isLoading) {
     return (
@@ -69,6 +77,7 @@ function AppContent() {
                 }
               />
               <Route path="*" element={<Navigate to="/" />} />
+              <Route path="/favorites" element={<Favourites />} />
             </>
           )}
         </Routes>

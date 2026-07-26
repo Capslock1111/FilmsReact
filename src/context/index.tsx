@@ -1,6 +1,4 @@
 import { AuthProvider } from "./AuthContext";
-import { SearchProvider } from "./SearchContext";
-import { ThemeProvider } from "./ThemeContext";
 import { ReactNode } from 'react';
 
 interface AppProviderProps {
@@ -10,9 +8,9 @@ interface AppProviderProps {
 export function AppProvider({ children }: AppProviderProps) {
   return (
     <AuthProvider>
-      <SearchProvider>
-        <ThemeProvider>{children}</ThemeProvider>
-      </SearchProvider>
+
+      {children}
+
     </AuthProvider>
   );
 }
