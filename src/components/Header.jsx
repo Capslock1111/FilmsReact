@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import "./Header.css";
 import LogService from "../services/LogService";
@@ -7,6 +7,7 @@ import { useThemeStore } from "../store/themeStore";
 import { useSearchStore } from "../store/searchStore";
 
 function Header() {
+  const navigate = useNavigate();
   const inputRef = useRef(null);
   const location = useLocation();
   const { logout, user } = useAuth();
@@ -26,7 +27,8 @@ function Header() {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSearchClick(); // Тот же обработчик при нажатии Enter
+      handleSearchClick();
+      navigate('/movies') // Тот же обработчик при нажатии Enter
     }
   };
 
@@ -46,7 +48,7 @@ function Header() {
     }
 
     // Также сбрасываем состояние поиска в App.jsx
-    setSearchQuery("");
+    // setSearchQuery("");
   }, [location.pathname, setSearchQuery]); // Срабатывает при смене пути URL и при изменении состояния поиска
 
   return (
