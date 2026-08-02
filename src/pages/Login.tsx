@@ -1,7 +1,7 @@
 import { useState, SubmitEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Login.css";
-import { useAuth } from "../context/useAuth";
+import { useAuthStore } from "../store/authStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
@@ -9,7 +9,7 @@ import { loginSchema, LoginFormData } from "../schemas/auth.schema";
 function Login() {
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login } = useAuthStore();
 
   const navigate = useNavigate();
 

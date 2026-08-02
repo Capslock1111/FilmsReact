@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileFormData, profileSchema } from "../schemas/profile.schema";
 import "./Profile.css";
-import { useAuth } from "../context/useAuth";
+import { useAuthStore } from "../store/authStore";
 import { GENRES as genres } from "../constants/genres";
 import { authService } from "../services/AuthService";
-import { p } from "motion/react-client";
+
 
 
 function Profile() {
-  const { user, setUser } = useAuth();
+  const { user, setUser } = useAuthStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -35,7 +35,7 @@ function Profile() {
       setValue('email', user.email || '');
       setValue('birthDate', user.birthDate || '');
       setValue('gender', user.gender || '');
-      setValue('favoriteGenre', user.favoriteGenre || '');
+      setValue('favoriteGenre', user.favouriteGenre || '');
       setAvatarPreview(user.avatar || null);
     };
     console.log('Проверка useEffect');

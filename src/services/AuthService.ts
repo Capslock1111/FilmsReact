@@ -1,3 +1,4 @@
+import { User } from '../types/user';
 class AuthService {
   private STORAGE_KEY = "cinemahub_auth";
   private USERS_KEY = "cinemahub_users";
@@ -9,7 +10,7 @@ class AuthService {
   }
 
   // Получить всех пользователей
-  getUsers(): any[] {
+  getUsers(): User[] {
     try {
       return JSON.parse(localStorage.getItem(this.USERS_KEY) || "[]");
     } catch {
@@ -18,7 +19,7 @@ class AuthService {
   }
 
   // Получить текущего пользователя
-  getCurrentUser(): any | null {
+  getCurrentUser(): User | null {
     try {
       return JSON.parse(localStorage.getItem(this.CURRENT_USER_KEY) || "null");
     } catch {
@@ -27,7 +28,7 @@ class AuthService {
   }
 
   // Установить текущего пользователя
-  setCurrentUser(user: any): void {
+  setCurrentUser(user: User): void {
     localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
   }
 
@@ -50,12 +51,7 @@ class AuthService {
   }
 
   // Регистрация
-  register(userData: {
-    username: string;
-    email: string;
-    password: string;
-    avatar?: string | null;
-  }): boolean {
+  register(userData: User): boolean {
     const users = this.getUsers();
 
     if (users.some((u) => u.username === userData.username)) {
@@ -77,7 +73,7 @@ class AuthService {
     localStorage.removeItem(this.STORAGE_KEY);
     localStorage.removeItem(this.CURRENT_USER_KEY);
   }
-  updateUser(updatedUser: any): boolean {
+  updateUser(updatedUser: User): boolean {
     try {
       const users = this.getUsers();
       const index = users.findIndex((u) => u.username === updatedUser.username);

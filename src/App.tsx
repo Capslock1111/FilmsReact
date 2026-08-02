@@ -12,17 +12,20 @@ import Movies from "./pages/Movies";
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { AppProvider } from "./context";
-import { useAuth } from "./context/useAuth";
 import Profile from "./pages/Profile";
 import { useThemeStore } from "./store/themeStore";
 import { useEffect } from "react";
-import Favourites from "./pages/favourites";
+import Favourites from "./pages/Favourites";
+import { useAuthStore } from "./store/authStore";
 
 function AppContent() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, initialize } = useAuthStore();
   const [featuredMovies, setFeaturedMovies] = useState([]);
   const theme = useThemeStore((state) => state.theme);
+
+  useEffect(() => {
+    initialize();
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -90,9 +93,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppProvider>
-        <AppContent />
-      </AppProvider>
+      <AppContent />
     </Router>
   );
 }

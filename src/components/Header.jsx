@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useRef, useEffect } from "react";
 import "./Header.css";
 import LogService from "../services/LogService";
-import { useAuth } from "../context/useAuth";
+import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
 import { useSearchStore } from "../store/searchStore";
 
@@ -10,7 +10,7 @@ function Header() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const location = useLocation();
-  const { logout, user } = useAuth();
+  const { logout, user } = useAuthStore();
   const searchQuery = useSearchStore((state) => state.query);
   const setSearchQuery = useSearchStore((state) => state.setQuery);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
