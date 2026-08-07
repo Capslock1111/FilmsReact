@@ -41,6 +41,14 @@
   gap: 2rem;
 }
 
+
+.nav-item {
+  display: flex;
+  text-wrap: nowrap;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .nav-link {
   text-decoration: none;
   color: var(--text-secondary);

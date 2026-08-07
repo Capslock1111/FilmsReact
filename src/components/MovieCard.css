@@ -17,11 +17,9 @@
 .movie-poster {
   position: relative;
   height: 200px;
-  background: linear-gradient(
-    45deg,
-    var(--primary-color),
-    var(--secondary-color)
-  );
+  background: linear-gradient(45deg,
+      var(--primary-color),
+      var(--secondary-color));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,16 +105,17 @@
 
 .movie-actions {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.6rem;
   margin-top: auto;
 }
 
-.watch-btn,
-.save-btn {
+
+.movie-actions button {
   flex: 1;
-  padding: 0.7rem;
-  font-size: 0.9rem;
+  padding: 15px;
+  font-size: 1rem;
 }
+
 
 @media (max-width: 768px) {
   .movie-poster {
