@@ -1,29 +1,65 @@
 import "./Movies.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import MovieCard from "../components/MovieCard";
-import LogService from "../services/LogService";
-import { apiService } from "../services/ApiService";
 import MovieModal from "../components/MovieModal";
 import { useSearchStore } from "../store/searchStore";
+import { useTopFilms } from "../api/hooks/useMovies";
 
-import Footer from "../components/Footer";
+function Movies() {
+  const { query: searchQuery } = useSearchStore();
 
-function Movies({ featuredMovies, setFeaturedMovies }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [sortBy, setSortBy] = useState("default");
   const [selectedGenre, setSelectedGenre] = useState("Все");
-  const [displaySearchQuery, setDisplaySearchQuery] = useState("");
-  const [selectedMovie, setSelectedMovie] = useState(null); // ← состояние для хранения выбранного фильма
+  const [selectedMovie, setSelectedMovie] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const searchQuery = useSearchStore((state) => state.query);
-  const setSearchQuery = useSearchStore((state) => state.setQuery);
 
+  // ✅ Загружаем все фильмы через React Query
+  const { data, isLoading, isError, error } = useTopFilms(
+    "TOP_250_BEST_FILMS",
+    1,
+  );
 
-  const hasFetched = useRef(false); // ← флаг для контроля двойного запроса на сервер
+  // ✅ Полная логика фильтрации и сортировки внутри useMemo
+  const filteredAndSortedMovies = useMemo(() => {
+    if (!data) return [];
+
+    let movies = [...data];
+
+    if (searchQuery) {
+      movies = movies.filter((movie) =>
+        movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
+
+    if (selectedGenre !== "Все") {
+      movies = movies.filter((movie) => movie.genres?.includes(selectedGenre));
+    }
+
+    if (sortBy === "rating") {
+      movies.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+    } else if (sortBy === "year") {
+      movies.sort((a, b) => {
+        const yearA =
+          typeof a.year === "string" ? parseInt(a.year, 10) : a.year;
+        const yearB =
+          typeof b.year === "string" ? parseInt(b.year, 10) : b.year;
+        return (yearB ?? 0) - (yearA ?? 0);
+      });
+    } else if (sortBy === "title") {
+      movies.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return movies;
+  }, [data, searchQuery, selectedGenre, sortBy]);
+
+  // ✅ Все жанры из данных
+  const allGenres = useMemo(() => {
+    if (!data) return ["Все"];
+    const genres = data.flatMap((movie) => movie.genres || []);
+    return ["Все", ...new Set(genres)].sort();
+  }, [data]);
 
   const handleMovieSelect = (movie) => {
-    console.log(movie);
     setSelectedMovie(movie);
     setIsOpen(true);
   };
@@ -33,107 +69,49 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
     setSelectedMovie(null);
   };
 
-  const allGenres = [
-    "Все",
-    ...[...new Set(featuredMovies.flatMap((movie) => movie.genres))],
-  ].sort();
-
-  useEffect(() => {
-    if (hasFetched.current) return; // избавляемся от двойного запроса в режиме разработки
-    hasFetched.current = true;
-
-    const fetchMovies = async () => {
-      try {
-        LogService.info("Начало загрузки фильмов");
-        setIsLoading(true);
-
-        const moviesData = await apiService.getTopFilms(
-          "TOP_250_BEST_FILMS",
-          1,
-        );
-
-        setFeaturedMovies(moviesData || []);
-        setError(null);
-      } catch (err) {
-        LogService.error("Ошибка загрузки фильмов:", err);
-        setError("Не удалось загрузить фильмы. Пожалуйста, попробуйте позже.");
-        setFeaturedMovies(apiService.getFallbackMovies());
-      } finally {
-        setIsLoading(false);
-        LogService.success("Фильмы загружены", {
-          count: featuredMovies.length,
-        });
-      }
-    };
-
-    fetchMovies();
-  }, []);
-
-  useEffect(() => {
-    if (searchQuery) {
-      setDisplaySearchQuery(searchQuery);
-    }
-  }, [searchQuery]);
-
   const clearFilters = () => {
     setSortBy("default");
     setSelectedGenre("Все");
-    setSearchQuery("");
-    setDisplaySearchQuery("");
   };
 
-  const onHandleGenreChange = (event) => {
-    setSelectedGenre(event.target.value);
-    LogService.info(`Выбран жанр:`, event.target.value);
+  const handleGenreChange = (e) => {
+    setSelectedGenre(e.target.value);
   };
 
-  const filteredMovies = featuredMovies.filter((movie) => {
-    // Фильтр по поисковому запросу
-    const matchesSearch = searchQuery
-      ? movie.title.toLowerCase().includes(searchQuery.toLowerCase())
-      : true;
-
-    // Фильтр по жанру
-    const matchesGenre =
-      selectedGenre === "Все"
-        ? true
-        : movie.genres && movie.genres.includes(selectedGenre);
-
-    // Оба условия должны выполняться
-    return matchesSearch && matchesGenre;
-  });
-
-  if (sortBy === "rating") {
-    filteredMovies.sort((a, b) => b.rating - a.rating);
-  } else if (sortBy === "year") {
-    filteredMovies.sort((a, b) => b.year - a.year);
-  } else if (sortBy === "title") {
-    filteredMovies.sort((a, b) => a.title.localeCompare(b.title));
-  }
-
-  const moviesData =
-    filteredMovies.length === 0 ? (
-      <div className="no-results">
-        <div className="no-results-icon">🎬</div>
-        <h2 className="no-results-title">Фильмы не найдены</h2>
-        <p className="no-results-text">
-          Попробуйте изменить параметры поиска или выбрать другой жанр
-        </p>
-        <button onClick={clearFilters} className="btn btn-accent">
-          Показать все фильмы
-        </button>
-      </div>
-    ) : (
-      <div className="movies-grid">
-        {filteredMovies.map((movie) => (
-          <MovieCard
-            key={movie.id}
-            movie={movie}
-            onHandleSelect={handleMovieSelect}
-          />
-        ))}
+  if (isLoading) {
+    return (
+      <div className="movies-page">
+        <div className="container">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <p>Загрузка фильмов...</p>
+          </div>
+        </div>
       </div>
     );
+  }
+
+  if (isError) {
+    return (
+      <div className="movies-page">
+        <div className="container">
+          <div className="error-container">
+            <div className="error-icon">⚠️</div>
+            <h2 className="error-title">Ошибка загрузки</h2>
+            <p className="error-message">
+              {error?.message || "Не удалось загрузить фильмы"}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="btn btn-accent"
+            >
+              Повторить попытку
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="movies-page">
@@ -141,12 +119,11 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
         <div className="page-header">
           <h1 className="page-title">Каталог фильмов</h1>
           <p className="page-subtitle">
-            Коллекция из {featuredMovies.length} фильмов различных жанров и
-            годов выпуска
+            Коллекция из {data?.length || 0} фильмов различных жанров и годов
+            выпуска
           </p>
         </div>
 
-        {/* Панель фильтров */}
         <div className="filters-panel">
           <div className="filter-group">
             <label htmlFor="genre-filter" className="filter-label">
@@ -155,8 +132,8 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
             <select
               id="genre-filter"
               className="filter-select"
-              value={selectedGenre} //
-              onChange={(e) => onHandleGenreChange(e)} //
+              value={selectedGenre}
+              onChange={handleGenreChange}
             >
               {allGenres.map((genre) => (
                 <option key={genre} value={genre}>
@@ -191,40 +168,40 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
           </button>
 
           <div className="search-info">
-            {displaySearchQuery && (
-              <span className="search-query">
-                Поиск: "{displaySearchQuery}"
-              </span>
+            {searchQuery && (
+              <span className="search-query">Поиск: "{searchQuery}"</span>
             )}
             <span className="movies-count">
-              Результаты: {filteredMovies.length} из {featuredMovies.length}
+              Результаты: {filteredAndSortedMovies.length} из{" "}
+              {data?.length || 0}
             </span>
           </div>
         </div>
 
-        {/* Сетка фильмов
-        Если ошибка с загрузкой данных, то отображается блок div с ошибкой.
-        Если данные загружены, то отображается блок div с сеткой фильмов.
-        */}
-        {isLoading ? (
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <p>Загрузка фильмов...</p>
-          </div>
-        ) : error ? (
-          <div className="error-container">
-            <div className="error-icon">⚠️</div>
-            <h2 className="error-title">Ошибка загрузки</h2>
-            <p className="error-message">{error}</p>
+        {filteredAndSortedMovies.length === 0 ? (
+          <div className="no-results">
+            <div className="no-results-icon">🎬</div>
+            <h2 className="no-results-title">Фильмы не найдены</h2>
+            <p className="no-results-text">
+              Попробуйте изменить параметры поиска или выбрать другой жанр
+            </p>
             <button onClick={clearFilters} className="btn btn-accent">
-              Повторить попытку
+              Показать все фильмы
             </button>
-            {moviesData}
           </div>
         ) : (
-          moviesData
+          <div className="movies-grid">
+            {filteredAndSortedMovies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                onHandleSelect={handleMovieSelect}
+              />
+            ))}
+          </div>
         )}
       </div>
+
       {isOpen && (
         <MovieModal
           movie={selectedMovie}
@@ -232,7 +209,6 @@ function Movies({ featuredMovies, setFeaturedMovies }) {
           onCloseModal={handleCloseModal}
         />
       )}
-
     </div>
   );
 }

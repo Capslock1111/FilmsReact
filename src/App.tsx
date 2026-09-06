@@ -17,6 +17,7 @@ import { useThemeStore } from "./store/themeStore";
 import { useEffect } from "react";
 import Favourites from "./pages/Favourites";
 import { useAuthStore } from "./store/authStore";
+import { QueryProvider } from "./api/QueryProvider";
 
 function AppContent() {
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
@@ -59,8 +60,8 @@ function AppContent() {
                 path="/"
                 element={
                   <Home
-                    featuredMovies={featuredMovies}
-                    setFeaturedMovies={setFeaturedMovies}
+                  // featuredMovies={featuredMovies}
+                  // setFeaturedMovies={setFeaturedMovies}
                   />
                 }
               />
@@ -93,7 +94,7 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AppContent />
+      <QueryProvider><AppContent /></QueryProvider>
     </Router>
   );
 }

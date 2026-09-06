@@ -5,10 +5,11 @@ import { useAuthStore } from "../store/authStore";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "../schemas/auth.schema";
+import { useLogin } from '../api/hooks/useAuth';
 
 function Login() {
   const [serverError, setServerError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuthStore();
 
   const navigate = useNavigate();
@@ -23,22 +24,24 @@ function Login() {
     mode: "onBlur", // валидация при потере фокуса
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    setIsLoading(true);
-    setServerError("");
+  const { mutate, isPending } = useLogin();
 
-    try {
-      const success = await login(data.username, data.password);
-      if (success) {
-        navigate("/");
-      } else {
-        setServerError("Неверный логин или пароль");
+  const onSubmit = (data: LoginFormData) => {
+    mutate(
+      { username: data.username, password: data.password },
+      {
+        onSuccess: (success) => {
+          if (success) {
+            navigate("/");
+          } else {
+            setServerError("Неверный логин или пароль");
+          }
+        },
+        onError: () => {
+          setServerError("Ошибка при входе. Попробуйте позже.");
+        },
       }
-    } catch (err) {
-      setServerError("Ошибка при входе. Попробуйте позже.");
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
 
   return (
@@ -65,7 +68,7 @@ function Login() {
               id="username"
               className={`form-input`}
               placeholder="Введите логин"
-              disabled={isLoading}
+              disabled={isPending}
               {...register("username")}
             />
             {errors.username && (
@@ -82,7 +85,7 @@ function Login() {
               id="password"
               className={`form-input`}
               placeholder="Введите пароль"
-              disabled={isLoading}
+              disabled={isPending}
               {...register("password")}
             />
             {errors.password && (
@@ -93,9 +96,9 @@ function Login() {
           <button
             type="submit"
             className="btn btn-accent login-btn"
-            disabled={isLoading}
+            disabled={isPending}
           >
-            {isLoading ? "Вход..." : "Войти"}
+            {isPending ? "Вход..." : "Войти"}
           </button>
         </form>
 

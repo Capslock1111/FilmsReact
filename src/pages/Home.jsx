@@ -6,51 +6,65 @@ import MovieModal from "../components/MovieModal";
 import MovieCard from "../components/MovieCard";
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from "../components/Footer";
+import { useTopFilms } from "../api/hooks/useMovies";
+import { useMemo } from "react";
 
 
-function Home({ featuredMovies, setFeaturedMovies }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+function Home() {
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data, isLoading, isError, error } = useTopFilms(
+    "TOP_250_BEST_FILMS",
+    1,
+  );
 
+  const featuredMovies = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    const shuffled = [...data];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, 3);
+  }, [data]);
 
+  // useEffect(() => {
+  //   const loadFeaturedMovies = async () => {
+  //     try {
+  //       setIsLoading(true);
 
-  useEffect(() => {
-    const loadFeaturedMovies = async () => {
-      try {
-        setIsLoading(true);
+  //       // Загружаем топ-250 фильмов с API (так же как в Movies.jsx)
+  //       const topFilms = await apiService.getTopFilms("TOP_250_BEST_FILMS", 1);
+  //       if (topFilms && topFilms.length > 0) {
+  //         // Алгоритм Тасования Фишера-Йейтса (Fisher-Yates Shuffle) - для случайного выбора трех фильмов
+  //         const shuffled = [...topFilms];
+  //         for (let i = shuffled.length - 1; i > 0; i--) {
+  //           const j = Math.floor(Math.random() * (i + 1));
+  //           [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  //         }
 
-        // Загружаем топ-250 фильмов с API (так же как в Movies.jsx)
-        const topFilms = await apiService.getTopFilms("TOP_250_BEST_FILMS", 1);
-        if (topFilms && topFilms.length > 0) {
-          // Алгоритм Тасования Фишера-Йейтса (Fisher-Yates Shuffle) - для случайного выбора трех фильмов
-          const shuffled = [...topFilms];
-          for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-          }
+  //         // Берем первые 3 после перемешивания
+  //         setFeaturedMovies(shuffled.slice(0, 3));
+  //       } else {
+  //         // Если API вернул пустой массив, используем fallback
+  //         setFeaturedMovies(apiService.getFallbackMovies().slice(0, 3));
+  //       }
 
-          // Берем первые 3 после перемешивания
-          setFeaturedMovies(shuffled.slice(0, 3));
-        } else {
-          // Если API вернул пустой массив, используем fallback
-          setFeaturedMovies(apiService.getFallbackMovies().slice(0, 3));
-        }
+  //       setError(null);
+  //     } catch (err) {
+  //       console.error("Ошибка загрузки фильмов:", err);
+  //       setError("Не удалось загрузить фильмы");
+  //       // Fallback на случай ошибки
+  //       setFeaturedMovies(apiService.getFallbackMovies().slice(0, 3));
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-        setError(null);
-      } catch (err) {
-        console.error("Ошибка загрузки фильмов:", err);
-        setError("Не удалось загрузить фильмы");
-        // Fallback на случай ошибки
-        setFeaturedMovies(apiService.getFallbackMovies().slice(0, 3));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadFeaturedMovies();
-  }, []);
+  //   loadFeaturedMovies();
+  // }, []);
 
   const handleMovieSelect = (movie) => {
     setSelectedMovie(movie);
