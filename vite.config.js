@@ -2,7 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig(({ mode }) => ({
+  base: '/FilmsReact/',
   plugins: [
+
     react({
       babel: {
         plugins: [['babel-plugin-react-compiler']],
@@ -69,4 +71,4 @@ export default defineConfig(({ mode }) => ({
   esbuild: {
     drop: mode === 'production' ? ['console', 'debugger'] : [],
   }
-}))
+}));
