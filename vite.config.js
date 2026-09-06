@@ -13,6 +13,26 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icons/*.png'],
+      // manifest: {
+      //   name: 'CinemaHub',
+      //   short_name: 'CinemaHub',
+      //   description: 'Каталог фильмов с поиском и избранным',
+      //   theme_color: '#4361ee',
+      //   background_color: '#ffffff',
+      //   display: 'standalone',
+      //   icons: [
+      //     {
+      //       src: '/icons/cinema_icon_192px.png',
+      //       sizes: '192x192',
+      //       type: 'image/png',
+      //     },
+      //     {
+      //       src: '/icons/cinema_icon_512px.png',
+      //       sizes: '512x512',
+      //       type: 'image/png',
+      //     },
+      //   ],
+      // },
       manifest: {
         name: 'CinemaHub',
         short_name: 'CinemaHub',
@@ -20,14 +40,16 @@ export default defineConfig(({ mode }) => ({
         theme_color: '#4361ee',
         background_color: '#ffffff',
         display: 'standalone',
+        start_url: '/FilmsReact/',
+        scope: '/FilmsReact/',
         icons: [
           {
-            src: '/icons/cinema_icon_192px.png',
+            src: '/FilmsReact/icons/cinema_icon_192px.png', // ✅ явный путь
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icons/cinema_icon_512px.png',
+            src: '/FilmsReact/icons/cinema_icon_512px.png',
             sizes: '512x512',
             type: 'image/png',
           },
