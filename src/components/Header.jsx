@@ -5,6 +5,8 @@ import LogService from "../services/LogService";
 import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
 import { useSearchStore } from "../store/searchStore";
+import { useFavouritesState } from "../store/favouritesStore";
+
 
 function Header() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ function Header() {
   const setSearchQuery = useSearchStore((state) => state.setQuery);
   const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const theme = useThemeStore((state) => state.theme);
+  const { favourites } = useFavouritesState();
 
   const handleSearchClick = () => {
     if (inputRef.current) {
@@ -100,7 +103,7 @@ function Header() {
               </li>
               <li className="nav-item">
                 <NavLink to="/favorites" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  ❤️ Избранное
+                  ❤️ Избранное({favourites.length})
                 </NavLink>
               </li>
             </ul>

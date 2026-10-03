@@ -134,7 +134,7 @@ function MovieModal({ movie, onCloseModal, isOpen }) {
           <button className="btn btn-outline" onClick={onCloseModal}>
             Закрыть
           </button>
-          <button className="btn btn-accent">❤️ Добавить в избранное</button>
+          {/* <button className="btn btn-accent">❤️ Добавить в избранное</button> */}
         </div>
       </div>
     </motion.div>

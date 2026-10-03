@@ -30,12 +30,13 @@ function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
   return (
     <motion.div
       className="movie-card"
-      onClick={() => onHandleSelect && onHandleSelect(movie)}
+      // onClick={() => onHandleSelect && onHandleSelect(movie)}
       variants={itemVariants}
     >
-      <div className="movie-poster">
+      <div onClick={() => onHandleSelect && onHandleSelect(movie)} className="movie-poster">
         <div className="poster-placeholder">🎬</div>
         <div className="movie-rating">⭐ {movie.rating || 'N/A'}</div>
+
       </div>
 
       <div className="movie-content">
@@ -49,7 +50,7 @@ function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
 
         <p className="movie-description">{movie.description}</p>
 
-        <div className="movie-genres">
+        <div onClick={() => onHandleSelect && onHandleSelect(movie)} className="movie-genres">
           {movie.genres.map((genre, index) => (
             <span key={index} className="genre-tag">
               {genre}
@@ -61,12 +62,13 @@ function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
           <button onClick={handleFavouriteToggle} className="btn btn-outline">
             {isFav ? "❤️" : "🤍"}
           </button>
-          <button className="btn btn-accent watch-btn">Смотреть</button>
-          <button className="btn btn-outline save-btn">Сохранить</button>
+          <button onClick={() => onHandleSelect && onHandleSelect(movie)} className="btn btn-accent watch-btn">Смотреть</button>
+          <button onClick={() => onHandleSelect && onHandleSelect(movie)} className="btn btn-outline save-btn">Сохранить</button>
 
         </div>
       </div>
     </motion.div>
+
   );
 }
 
