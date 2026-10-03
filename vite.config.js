@@ -44,12 +44,12 @@ export default defineConfig(({ mode }) => ({
         scope: '/FilmsReact/',
         icons: [
           {
-            src: '/icons/cinema_icon_192px.png', // ✅ явный путь
+            src: '/FilmsReact/icons/cinema_icon_192px.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/icons/cinema_icon_512px.png',
+            src: '/FilmsReact/icons/cinema_icon_512px.png',
             sizes: '512x512',
             type: 'image/png',
           },

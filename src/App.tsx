@@ -21,7 +21,7 @@ import { QueryProvider } from "./api/QueryProvider";
 
 function AppContent() {
   const { isAuthenticated, isLoading, initialize } = useAuthStore();
-  const [featuredMovies, setFeaturedMovies] = useState([]);
+  // const [featuredMovies, setFeaturedMovies] = useState([]);
   const theme = useThemeStore((state) => state.theme);
 
   useEffect(() => {
@@ -69,8 +69,8 @@ function AppContent() {
                 path="/movies"
                 element={
                   <Movies
-                    featuredMovies={featuredMovies}
-                    setFeaturedMovies={setFeaturedMovies}
+                  // featuredMovies={featuredMovies}
+                  // setFeaturedMovies={setFeaturedMovies}
                   />
                 }
               />
