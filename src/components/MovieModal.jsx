@@ -6,21 +6,21 @@ import { useFavouritesState } from "../store/favouritesStore";
 
 function MovieModal({ movie, onCloseModal, isOpen }) {
   if (!isOpen || !movie) return null;
-  // const { addFavourite, removeFavourite, isFavourite } = useFavouritesState();
+  const { addFavourite, removeFavourite, isFavourite } = useFavouritesState();
   // const isFav = isFavourite(movie.id);
   // const [isFavor, setIsFavor] = useState(isFav);
 
-  // const handleFavouriteToggle = () => {
-  //   if (isFav) {
-  //     removeFavourite(movie.id);
-  //     // setIsFavor(false)
-  //     // console.log(isFav);
-  //   } else {
-  //     addFavourite(movie);
-  //     // setIsFavor(true)
-  //     // console.log(isFav);
-  //   }
-  // };
+  const handleFavouriteToggle = () => {
+    if (isFavourite(movie.id)) {
+      removeFavourite(movie.id);
+      // setIsFavor(false)
+      // console.log(isFav);
+    } else {
+      addFavourite(movie);
+      // setIsFavor(true)
+      // console.log(isFav);
+    }
+  };
   return (
     <motion.div className="modal-overlay"
       initial={{ opacity: 0.5, y: 50 }}
@@ -150,7 +150,8 @@ function MovieModal({ movie, onCloseModal, isOpen }) {
           <button className="btn btn-outline" onClick={onCloseModal}>
             Закрыть
           </button>
-          {/* <button className="btn btn-accent" onClick={handleFavouriteToggle}>❤️ Добавить в избранное</button> */}
+          <button className="btn btn-accent" onClick={handleFavouriteToggle}>
+            {isFavourite(movie.id) ? "Удалить из избранного" : "Добавить в избранное"}</button>
         </div>
       </div>
     </motion.div>

@@ -2,7 +2,7 @@ import "./MovieCard.css";
 import { Movie } from '../types/movie';
 import { motion } from 'framer-motion';
 import { useFavouritesState } from "../store/favouritesStore";
-import { useState } from "react";
+// import { useState } from "react";
 
 interface MovieCardProps {
   movie: Movie;
@@ -10,18 +10,18 @@ interface MovieCardProps {
 }
 function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
   const { addFavourite, removeFavourite, isFavourite } = useFavouritesState();
-  const isFav = isFavourite(movie.id);
-  const [isFavor, setIsFavor] = useState(isFav);
+  // const isFav = isFavourite(movie.id);
+  // const [isFavor, setIsFavor] = useState(isFav);
 
   const handleFavouriteToggle = () => {
-    if (isFavor) {
+    if (isFavourite(movie.id)) {
       removeFavourite(movie.id);
-      setIsFavor(false)
-      console.log(isFav);
+      // setIsFavor(false)
+      // console.log(isFav);
     } else {
       addFavourite(movie);
-      setIsFavor(true)
-      console.log(isFav);
+      // setIsFavor(true)
+      // console.log(isFav);
     }
   };
   const itemVariants = {
@@ -73,7 +73,7 @@ function MovieCard({ movie, onHandleSelect }: MovieCardProps) {
 
         <div className="movie-actions">
           <button onClick={handleFavouriteToggle} className="btn btn-outline">
-            {isFavor ? "❤️" : "🤍"}
+            {isFavourite(movie.id) ? "❤️" : "🤍"}
           </button>
           <button onClick={() => onHandleSelect && onHandleSelect(movie)} className="btn btn-accent watch-btn">Смотреть</button>
           <button onClick={() => onHandleSelect && onHandleSelect(movie)} className="btn btn-outline save-btn">Сохранить</button>
