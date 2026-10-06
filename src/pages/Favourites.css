@@ -4,6 +4,17 @@
     min-height: 70vh;
 }
 
+h1 {
+    margin-bottom: 100px;
+}
+
+.cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
 .favorites-page .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -68,6 +79,13 @@
 
 .favorites-grid .movie-card {
     height: 100%;
+}
+
+.clean {
+    width: 100%;
+    max-width: 200px;
+    height: 50px;
+    background-color: rgba(221, 221, 221, 0.658);
 }
 
 /* Адаптивность */
